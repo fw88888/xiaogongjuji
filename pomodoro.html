@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>番茄钟</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            font-family: Arial, sans-serif;
+        }
+        .timer {
+            font-size: 6rem;
+            color: #333;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="timer" id="timer">25:00</div>
+    <div class="controls">
+        <button onclick="startTimer()">开始</button>
+        <button onclick="stopTimer()">停止</button>
+        <button onclick="resetTimer()">重置</button>
+    </div>
+
+    <script>
+        let timeLeft = 25 * 60; // 25分钟
+        let interval;
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            const seconds = (timeLeft % 60).toString().padStart(2, '0');
+            document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+            timeLeft--;
+        }
+
+        function startTimer() {
+            interval = setInterval(updateTimer, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(interval);
+        }
+
+        function resetTimer() {
+            clearInterval(interval);
+            timeLeft = 25 * 60; // 重置为25分钟
+            document.getElementById('timer').textContent = '25:00';
+        }
+    </script>
+</body>
+</html>

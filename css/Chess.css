@@ -1,0 +1,247 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f5f5f5;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    font-family: "楷体", "KaiTi", serif; /* 修改字体为楷体 */
+}
+
+#ground {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
+}
+
+#board {
+    width: 401px;
+    height: 451px;
+    padding: 30px;
+    background-color: #d2b48c; /* 棋盘背景颜色调整为浅棕色 */
+    position: relative;
+    top: 45%;
+    left: 0;
+    right: 0;
+    margin: -220px auto;
+    border: 3px solid #8b4513; /* 棋盘边框颜色调整为深棕色 */
+    border-radius: 2px;
+    box-shadow: 0 0 25px rgba(139, 69, 19, 0.35); /* 阴影颜色与边框一致 */
+}
+
+#board #space {
+    width: 450px;
+    height: 500px;
+    position: relative;
+    top: -100%;
+    margin: -25px;
+}
+
+#board #space article {
+    width: 44px;
+    height: 44px;
+    float: left;
+    transition: box-shadow 0.35s, outline 0.35s, border 0.35s, transform 0.35s;
+    border: 3px solid rgba(0, 0, 0, 0);
+}
+
+#board #space article:hover {
+    box-shadow: 0 0 25pt rgba(0, 0, 0, 0.35);
+    border: 3px double rgba(0, 0, 0, 0.15);
+    transform: scale(1.1, 1.1);
+}
+
+.CS {
+    border-radius: 500px;
+}
+
+.C {
+    font-family: "楷体", "KaiTi", serif; /* 棋子字体为楷体 */
+    width: 40px;
+    height: 40px;
+    font-size: 25px;
+    border-radius: 50px;
+    line-height: 40px;
+    text-align: center;
+    border: 2px solid rgba(0, 0, 0, 0);
+    box-shadow: 0 0 25pt rgba(0, 0, 0, 0.35);
+    transition: transform 0.35s;
+    cursor: pointer;
+}
+
+.BR, .BB, .PR, .PB, .JR, .JB, .MR, .MB, .XR, .XB, .SR, .SB, .J, .S {
+    border-color: #8b4513; /* 棋子边框颜色调整为深棕色 */
+    color: #ffffff; /* 棋子文字颜色为白色 */
+    background-color: #a0522d; /* 棋子背景颜色调整为深棕色 */
+}
+
+#board #line {
+    width: 100%;
+    height: 100%;
+}
+
+#board #line #rows {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#board #line #lines {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: -100%;
+    overflow: hidden;
+}
+
+#board #line .row {
+    width: 100%;
+    height: 1px;
+    background-color: #8b4513; /* 棋盘线条颜色调整为深棕色 */
+    margin-bottom: 49px;
+}
+
+#board #line .line {
+    width: 1px;
+    height: 100%;
+    background-color: #8b4513; /* 棋盘线条颜色调整为深棕色 */
+    margin-right: 49px;
+    float: left;
+}
+
+#board #line .end {
+    margin: 0;
+}
+
+#board #line #river {
+    width: 461px;
+    height: 100%;
+    position: relative;
+    top: -200%;
+    left: -30px;
+}
+
+#board #line #river article {
+    position: relative;
+    top: 201px;
+    width: 100%;
+    height: 49px;
+    background-color: rgba(210, 180, 140, 0.95); /* 河流背景颜色与棋盘一致 */
+    box-shadow: inset 0 0 25px rgba(139, 69, 19, 0.55); /* 阴影颜色与边框一致 */
+    font-family: "楷体", "KaiTi", serif; /* 字体为楷体 */
+    font-size: 45px;
+    text-align: center;
+    letter-spacing: 1px;
+    color: #8b4513; /* 文字颜色为深棕色 */
+    opacity: 0.95;
+}
+
+#board #flower {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: -300%;
+    overflow: hidden;
+}
+
+#board #flower article {
+    width: 25px;
+    height: 25px;
+    position: relative;
+    left: 37px;
+    top: 37px;
+    float: left;
+    border: 1px solid rgba(139, 69, 19, 0.55); /* 花纹边框颜色调整为深棕色 */
+    transform: rotate(45deg);
+}
+
+#board #flower .L2 {
+    width: 100%;
+    height: 50px;
+}
+
+#board #flower .L5 {
+    width: 100%;
+    height: 50px;
+}
+
+#board #flower .L2 article:nth-child(2) {
+    margin-left: 273px;
+}
+
+#board #flower .L5 article:nth-child(1n+2) {
+    margin-left: 73px;
+}
+
+#board #flower .L5 article:nth-child(1) {
+    margin-left: -50px;
+}
+
+#board #flower .L5 article:nth-child(2) {
+    margin-left: 50px;
+}
+
+#board #flower #F {
+    margin-top: 50px;
+    height: 200px;
+}
+
+#board #cross {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: -400%;
+}
+
+#board #cross #T {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 51px;
+}
+
+#board #cross #B {
+    width: 100%;
+    height: 200px;
+}
+
+#board #cross article {
+    margin: 0 auto;
+    width: 140px;
+    height: 1px;
+    position: relative;
+    top: 50px;
+    background-color: #8b4513; /* 交叉线颜色调整为深棕色 */
+}
+
+#board #cross article:nth-child(1) {
+    transform: rotate(45deg);
+}
+
+#board #cross article:nth-child(2) {
+    margin-top: -1px;
+    transform: rotate(-45deg);
+}
+
+#board #cross #B article {
+    position: relative;
+    top: 149px;
+}
+
+/* 添加&ldquo;楚河汉界&rdquo;四字 */
+#board #river-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: "楷体", "KaiTi", serif;
+    font-size: 24px;
+    color: #8b4513; /* 文字颜色为深棕色 */
+    text-align: center;
+    white-space: nowrap;
+}

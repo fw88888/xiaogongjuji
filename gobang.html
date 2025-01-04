@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五子棋</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #4B0082, #8A2BE2);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .game-container {
+            text-align: center;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(15, 40px);
+            grid-template-rows: repeat(15, 40px);
+            background-color: #D2B48C;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .cell {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cell::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #000;
+        }
+
+        .cell::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 1px;
+            height: 100%;
+            background-color: #000;
+        }
+
+        .piece {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+
+        .piece.black {
+            background-color: #000000;
+        }
+
+        .piece.white {
+            background-color: #FFFFFF;
+        }
+
+        .status {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #FFF;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .reset-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: #FFF;
+            background-color: #8B0000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .reset-button:hover {
+            background-color: #B22222;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            font-size: 24px;
+        }
+
+        .modal button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: #FFF;
+            background-color: #8B0000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal button:hover {
+            background-color: #B22222;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="board" id="board">
+            <!-- 棋盘格子 -->
+        </div>
+        <div class="status" id="status">黑方走棋</div>
+        <button class="reset-button" id="resetButton">重新开始</button>
+    </div>
+
+    <!-- 弹窗 -->
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modalContent"></div>
+        <button onclick="resetGame()">重新开始</button>
+    </div>
+
+    <script>
+        const boardElement = document.getElementById('board');
+        const statusElement = document.getElementById('status');
+        const resetButton = document.getElementById('resetButton');
+        const modal = document.getElementById('modal');
+        const modalContent = document.getElementById('modalContent');
+        const BOARD_SIZE = 15;
+        let currentPlayer = 'black';
+        let boardState = Array(BOARD_SIZE).fill().map(() => Array(BOARD_SIZE).fill(null));
+        let gameOver = false;
+
+        function createBoard() {
+            for (let row = 0; row < BOARD_SIZE; row++) {
+                for (let col = 0; col < BOARD_SIZE; col++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+                    cell.addEventListener('click', () => handleCellClick(row, col));
+                    boardElement.appendChild(cell);
+                }
+            }
+        }
+
+        function handleCellClick(row, col) {
+            if (gameOver || boardState[row][col]) return;
+
+            boardState[row][col] = currentPlayer;
+            updateBoard();
+
+            if (checkWin(row, col)) {
+                modalContent.textContent = `${currentPlayer === 'black' ? '黑方' : '白方'} 胜利！`;
+                modal.style.display = 'block';
+                gameOver = true;
+                return;
+            }
+
+            currentPlayer = currentPlayer === 'black' ? 'white' : 'black';
+            statusElement.textContent = `${currentPlayer === 'black' ? '黑方' : '白方'} 走棋`;
+        }
+
+        function updateBoard() {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => {
+                const row = parseInt(cell.dataset.row);
+                const col = parseInt(cell.dataset.col);
+                const piece = boardState[row][col];
+                if (piece) {
+                    cell.innerHTML = `<div class="piece ${piece}"></div>`;
+                } else {
+                    cell.innerHTML = '';
+                }
+            });
+        }
+
+        function checkWin(row, col) {
+            const directions = [
+                [1, 0], // 水平
+                [0, 1], // 垂直
+                [1, 1], // 对角线
+                [1, -1] // 反对角线
+            ];
+
+            for (const [dx, dy] of directions) {
+                let count = 1;
+                for (let i = 1; i < 5; i++) {
+                    const newRow = row + dx * i;
+                    const newCol = col + dy * i;
+                    if (newRow < 0 || newRow >= BOARD_SIZE || newCol < 0 || newCol >= BOARD_SIZE || boardState[newRow][newCol] !== currentPlayer) break;
+                    count++;
+                }
+                for (let i = 1; i < 5; i++) {
+                    const newRow = row - dx * i;
+                    const newCol = col - dy * i;
+                    if (newRow < 0 || newRow >= BOARD_SIZE || newCol < 0 || newCol >= BOARD_SIZE || boardState[newRow][newCol] !== currentPlayer) break;
+                    count++;
+                }
+                if (count >= 5) return true;
+            }
+            return false;
+        }
+
+        function resetGame() {
+            boardState = Array(BOARD_SIZE).fill().map(() => Array(BOARD_SIZE).fill(null));
+            currentPlayer = 'black';
+            gameOver = false;
+            statusElement.textContent = '黑方走棋';
+            modal.style.display = 'none';
+            updateBoard();
+        }
+
+        resetButton.addEventListener('click', resetGame);
+
+        createBoard();
+    </script>
+</body>
+</html>
